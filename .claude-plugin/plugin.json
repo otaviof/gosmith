@@ -1,0 +1,22 @@
+{
+  "name": "gosmith",
+  "version": "0.0.1",
+  "description": "Specialized agents and skills for Go development, infrastructure automation, and workflow management",
+  "author": {
+    "name": "Otávio Fernandes",
+    "url": "https://github.com/otaviof"
+  },
+  "homepage": "https://github.com/otaviof/gosmith",
+  "repository": "https://github.com/otaviof/gosmith",
+  "license": "Apache-2.0",
+  "keywords": [
+    "go",
+    "golang",
+    "kubernetes",
+    "openshift",
+    "devops",
+    "ci-cd",
+    "tekton",
+    "development"
+  ]
+}

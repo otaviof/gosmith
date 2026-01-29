@@ -1,0 +1,8 @@
+/.claude/*.local.json
+/.claude/local/
+/.DS_Store
+/.idea/
+/.vscode/
+/*.swo
+/*.swp
+/*~

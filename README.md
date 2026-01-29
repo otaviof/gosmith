@@ -4,8 +4,11 @@ A Claude Code plugin providing specialized agents and skills for Go development,
 
 ## Installation
 
-```bash
-claude install github.com/otaviof/gosmith
+Add the marketplace and install the plugin:
+
+```shell
+/plugin marketplace add otaviof/gosmith
+/plugin install gosmith@otaviof-gosmith
 ```
 
 ### Local Development

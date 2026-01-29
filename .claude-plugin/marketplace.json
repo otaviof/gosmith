@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "gosmith",
-      "source": ".",
+      "source": "./",
       "description": "Specialized agents and skills for Go development, infrastructure automation, and workflow management",
       "version": "0.0.1",
       "author": {

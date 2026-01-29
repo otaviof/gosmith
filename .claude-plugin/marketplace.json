@@ -1,5 +1,5 @@
 {
-  "name": "otaviof-gosmith",
+  "name": "gosmith",
   "owner": {
     "name": "Otávio Fernandes"
   },
@@ -28,7 +28,8 @@
         "tekton",
         "development"
       ],
-      "category": "development"
+      "category": "development",
+      "strict": false
     }
   ]
 }

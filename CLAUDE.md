@@ -41,6 +41,7 @@ Skip for trivial changes (typos, single-line fixes).
 |------|----------|
 | `agents/*.md` | Agents (YAML frontmatter + MCRF + Persona) |
 | `skills/*/SKILL.md` | Skills |
-| `.claude-plugin/plugin.json` | Plugin manifest |
+| `.claude-plugin/plugin.json` | Plugin manifest (for local development) |
+| `.claude-plugin/marketplace.json` | Marketplace catalog (for distribution) |
 | `README.md` | User documentation |
 | `CLAUDE.md` | Agent/development guidance |

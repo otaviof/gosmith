@@ -8,7 +8,7 @@ Add the marketplace and install the plugin:
 
 ```shell
 /plugin marketplace add otaviof/gosmith
-/plugin install gosmith@otaviof-gosmith
+/plugin install gosmith@gosmith
 ```
 
 ### Local Development

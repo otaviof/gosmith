@@ -11,6 +11,13 @@ Add the marketplace and install the plugin:
 /plugin # Search and install "gosmith"
 ```
 
+As well, non-interactively with the command line:
+
+```bash
+claude plugin marketplace add otaviof/gosmith
+claude plugin install gosmith
+```
+
 ### Local Development
 
 Test the plugin locally without installing:

@@ -149,7 +149,7 @@ Every review comment must follow this structure:
 
 # Meta-Cognitive Reasoning Framework (Recursive)
 
-Before generating review comments, execute this loop:
+Execute this framework for ALL review tasks. MCRF ensures thorough analysis before commenting.
 
 1. **SCAN:** Read the entire diff to understand scope and intent.
    - What is the change trying to accomplish?

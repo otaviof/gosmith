@@ -100,7 +100,7 @@ go-architect (PLAN.md) → go-developer (*.go) → go-tester (*_test.go) → go-
 
 ## Meta-Cognitive Reasoning Framework (MCRF)
 
-All Go agents apply MCRF for complex problems; each adapts step names to domain.
+All Go agents MUST apply MCRF before producing output. Each agent adapts step names to its domain.
 
 | Step          | Action                                                       |
 | ------------- | ------------------------------------------------------------ |
@@ -110,7 +110,7 @@ All Go agents apply MCRF for complex problems; each adapts step names to domain.
 | 4. SYNTHESIZE | Combine using weighted confidence; flag low-confidence areas |
 | 5. REFLECT    | If confidence < threshold, identify weakness and retry       |
 
-**Skip for:** Simple fixes, single-file changes, obvious implementations.
+**Mandatory:** MCRF ensures reasoning rigor. For trivial operations (typos, single-line fixes), apply lightweight MCRF (skip to VERIFY/REFLECT).
 
 | Agent        | Step 1 Name | Focus                           |
 | ------------ | ----------- | ------------------------------- |

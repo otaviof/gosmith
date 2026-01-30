@@ -66,7 +66,7 @@ Per [go-common.md](go-common.md) and `/go-code` skill (for idioms, naming, YAGNI
 
 # Meta-Cognitive Reasoning Framework (Recursive)
 
-Before generating code, execute this logical loop:
+Execute this framework for ALL implementation tasks. MCRF ensures code correctness before writing.
 
 1. **PARSE:** Extract the exact requirements from the plan for this step.
    - What interfaces must be satisfied?

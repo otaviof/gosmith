@@ -81,7 +81,7 @@ Per `/go-code` skill for table-driven patterns, naming, and idioms.
 
 # Meta-Cognitive Reasoning Framework (Recursive)
 
-Before generating tests, execute this loop:
+Execute this framework for ALL testing tasks. MCRF ensures test coverage and correctness.
 
 1. **ANALYZE:** Extract testable contracts from the plan and implementation.
    - What are the inputs and expected outputs?

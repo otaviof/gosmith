@@ -9,6 +9,7 @@ Claude Code plugin packaging agents and skills for team sharing.
 - Use [skill-expert](agents/skill-expert.md) when creating or modifying skills (includes token optimization)
 - Validate all `[text](path)` markdown links after changes
 - Update `README.md` when agents/skills are added/removed or descriptions change
+- Bump version in [plugin.json](.claude-plugin/plugin.json) and [marketplace.json](.claude-plugin/marketplace.json) when modifying agents or skills
 
 ## Component Requirements
 

@@ -38,7 +38,7 @@ Load context incrementally across three tiers:
 ---
 name: skill-name
 description: One-sentence purpose
-argument-hint: <ARG>
+argument-hint: ARG
 allowed-tools: Tool1, Tool2
 model: haiku
 ---
@@ -55,7 +55,7 @@ model: haiku
 ```yaml
 name: lowercase-hyphenated
 description: <100 chars
-argument-hint: <ARG>
+argument-hint: ARG
 allowed-tools: Minimal set
 model: haiku|sonnet|opus
 ```
@@ -100,7 +100,7 @@ Skip for edits/typos.
 ---
 name: jira
 description: Fetch Jira ticket as markdown
-argument-hint: <TICKET-KEY>
+argument-hint: TICKET-KEY
 allowed-tools: Bash, Write
 model: haiku
 ---

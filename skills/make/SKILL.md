@@ -1,7 +1,7 @@
 ---
 name: make
 description: Run or discover Makefile targets. Use for build automation.
-argument-hint: [target|--list|--help <target>]
+argument-hint: target|--list|--help TARGET
 allowed-tools: Bash, Read
 model: haiku
 ---

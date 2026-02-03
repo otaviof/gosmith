@@ -1,7 +1,7 @@
 ---
 name: ginkgo
 description: Run Ginkgo BDD tests with Kubernetes-aligned conventions.
-argument-hint: [--focus=PATTERN|--label=LABEL|--parallel]
+argument-hint: --focus=PATTERN|--label=LABEL|--parallel
 allowed-tools: Bash
 model: haiku
 ---

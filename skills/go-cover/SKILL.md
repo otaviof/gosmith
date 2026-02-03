@@ -1,7 +1,7 @@
 ---
 name: go-cover
 description: Generate Go test coverage report with package breakdown.
-argument-hint: [package-pattern]
+argument-hint: package-pattern
 allowed-tools: Bash
 model: haiku
 ---

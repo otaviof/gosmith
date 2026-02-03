@@ -1,7 +1,7 @@
 ---
 name: go-check
 description: Run Go verification pipeline (build + test + vet + lint).
-argument-hint: [--quick|--full]
+argument-hint: --quick|--full
 allowed-tools: Bash
 model: haiku
 ---

@@ -1,7 +1,7 @@
 ---
 name: jira
 description: Fetch a Jira ticket body as markdown for planning sessions.
-argument-hint: <TICKET-KEY>
+argument-hint: TICKET-KEY
 allowed-tools: Bash, Write
 model: haiku
 ---

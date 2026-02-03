@@ -1,7 +1,7 @@
 ---
 name: infra-common
 type: context
-description: "Shared policies for infrastructure agents (openshift-expert, devops-expert). Referenced for collaboration patterns and common standards."
+description: "Shared policies for infrastructure agents (openshift-expert, tekton-expert). Referenced for collaboration patterns and common standards."
 ---
 
 # Infrastructure Agent Family — Common Policies
@@ -10,29 +10,29 @@ description: "Shared policies for infrastructure agents (openshift-expert, devop
 
 | Agent | Owns | Delegates |
 |-------|------|-----------|
-| **openshift-expert** | Cluster infrastructure, operators, security policies, platform resources | Pipelines → devops-expert |
-| **devops-expert** | CI/CD pipelines, GitOps, build automation, DevSecOps | Cluster admin → openshift-expert |
+| **openshift-expert** | Cluster infrastructure, operators, security policies, platform resources | Pipelines → tekton-expert |
+| **tekton-expert** | Tekton pipelines, GitOps, build automation, DevSecOps | Cluster admin → openshift-expert |
 
 Both delegate application code to language-specific agents (go-*, etc.).
 
 ## Collaboration Matrix
 
-| Task | openshift-expert | devops-expert |
+| Task | openshift-expert | tekton-expert |
 |------|------------------|---------------|
-| Tekton installation | Platform prerequisites, SCCs, RBAC | Pipeline/Task configuration |
-| Secured pipelines | SCC policies, ServiceAccounts | Pipeline workspaces, secrets |
-| GitOps bootstrap | Cluster resources, namespaces | ArgoCD Applications, sync policies |
-| Pipeline storage | StorageClass, PVCs, ODF | Workspace bindings, caching |
-| Image builds | ImageStreams, registry access | Buildah/Kaniko tasks, signing |
+| Tekton installation | SCCs, RBAC, prerequisites | Pipeline/Task config |
+| Secured pipelines | SCC policies, ServiceAccounts | Workspaces, secrets |
+| GitOps bootstrap | Cluster resources, namespaces | ArgoCD Apps, sync policies |
+| Pipeline storage | StorageClass, PVCs, ODF | Workspace bindings, cache |
+| Image builds | ImageStreams, registry access | Buildah/Kaniko, signing |
 
-**Order:** Platform resources (openshift-expert) → pipeline config (devops-expert).
+**Order:** Platform resources (openshift-expert) → pipeline config (tekton-expert).
 
 ## Go Agent Integration
 
 | Scenario | Infrastructure | Go Agent |
 |----------|----------------|----------|
 | Go Operators | openshift-expert (SDK, OLM) | go-architect/developer |
-| Custom Tekton Tasks | devops-expert (pipeline) | go-architect/developer |
+| Custom Tekton Tasks | tekton-expert (pipeline) | go-architect/developer |
 
 ## CLI
 
@@ -42,8 +42,8 @@ Prefer `oc` over `kubectl`—drop-in replacement with OpenShift extensions.
 
 | From | To | Trigger |
 |------|----|---------|
-| devops-expert | openshift-expert | Needs cluster-level changes |
-| openshift-expert | devops-expert | Pipeline configuration required |
+| tekton-expert | openshift-expert | Needs cluster-level changes |
+| openshift-expert | tekton-expert | Pipeline configuration required |
 | Either | go-architect | Go design decisions needed |
 | Either | go-developer | Go implementation needed |
 
@@ -65,6 +65,4 @@ Prefer `oc` over `kubectl`—drop-in replacement with OpenShift extensions.
 
 ## Output Contract
 
-All responses: **Confidence** (0.0-1.0) + **Platform** (default: K8s 1.28+/OCP 4.14+) + **Security** (RBAC/SCC/NetworkPolicy) + **Caveats**.
-
-**YAML:** `apiVersion`/`kind`, `app.kubernetes.io/*` labels, resource limits, SCC/PSS requirements.
+All responses: **Confidence** (0.0-1.0) + **Platform** (K8s 1.35+/OCP 4.19+) + **Security** (RBAC/SCC/NetworkPolicy) + **Caveats**. YAML must include `apiVersion`/`kind`, `app.kubernetes.io/*` labels, resource limits, SCC/PSS requirements.

@@ -11,7 +11,7 @@
       "name": "gosmith",
       "source": "./",
       "description": "Specialized agents and skills for Go development, infrastructure automation, and workflow management",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "author": {
         "name": "Otávio Fernandes"
       },
@@ -23,9 +23,9 @@
         "golang",
         "kubernetes",
         "openshift",
-        "devops",
         "ci-cd",
         "tekton",
+        "github-actions",
         "development"
       ],
       "category": "development",

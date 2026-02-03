@@ -30,7 +30,7 @@ claude --plugin-dir ${PWD}
 
 | Type       | Count | Examples                                           |
 | ---------- | ----- | -------------------------------------------------- |
-| **Agents** | 10    | go-architect, go-developer, go-tester, go-reviewer |
+| **Agents** | 11    | go-architect, go-developer, tekton-expert, gha-expert |
 | **Skills** | 6     | /go-check, /go-cover, /jira, /make                 |
 
 ## Go Development Workflow
@@ -113,12 +113,13 @@ claude skills | grep gosmith
 | **go-tester**    | Writes adversarial tests, fuzz tests, and benchmarks. Validates against PLAN.md contracts.               |
 | **go-reviewer**  | Reviews PRs for correctness, security, and plan compliance. Invoke before merging.                       |
 
-### Infrastructure
+### Infrastructure & CI/CD
 
 | Agent                | Purpose                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------------- |
 | **openshift-expert** | Kubernetes and OpenShift cluster specialist for platform administration and security.        |
-| **devops-expert**    | CI/CD and DevOps specialist for Tekton pipelines, GitOps workflows, and automated delivery. |
+| **tekton-expert**    | Tekton and Kubernetes-native CI/CD specialist for pipelines, GitOps, and automated delivery. |
+| **gha-expert**       | GitHub Actions specialist for workflows, CI/CD automation, and GitHub-native DevSecOps.      |
 
 ### Utility
 
@@ -136,7 +137,8 @@ These are referenced by other agents, not invoked directly:
 | File              | Purpose                                                            |
 | ----------------- | ------------------------------------------------------------------ |
 | **go-common**     | Shared policies and standards referenced by all Go agents.         |
-| **infra-common**  | Collaboration patterns for openshift-expert and devops-expert.     |
+| **infra-common**  | Collaboration patterns for openshift-expert and tekton-expert.     |
+| **cicd-common**   | DevSecOps, secrets, and container build standards for CI/CD agents. |
 | **claude-common** | Shared policies for Claude Code extensibility (skills vs. agents). |
 
 ## Skills
@@ -255,3 +257,4 @@ Use `/agent-persona` when creating new agents. See [agent-expert](agents/agent-e
 - [claude-common](agents/claude-common.md) - Skills vs. agents distinction
 - [go-common](agents/go-common.md) - Shared Go policies and standards
 - [infra-common](agents/infra-common.md) - Infrastructure agent collaboration
+- [cicd-common](agents/cicd-common.md) - CI/CD DevSecOps and build standards

@@ -31,7 +31,7 @@ claude --plugin-dir ${PWD}
 | Type       | Count | Examples                                           |
 | ---------- | ----- | -------------------------------------------------- |
 | **Agents** | 11    | go-architect, go-developer, tekton-expert, gha-expert |
-| **Skills** | 6     | /go-check, /go-cover, /jira, /make                 |
+| **Skills** | 7     | /go-check, /go-cover, /ginkgo, /jira, /make        |
 
 ## Go Development Workflow
 
@@ -149,6 +149,7 @@ Skills are discrete, repeatable tasks invoked via `/skill-name`. Unlike agents, 
 | ------------------ | ---------------------------------------------------------- |
 | **/go-check**      | Run Go verification pipeline (build + test + vet + lint).  |
 | **/go-cover**      | Generate Go test coverage report with package breakdown.   |
+| **/ginkgo**        | Run Ginkgo BDD tests with Kubernetes-aligned conventions.  |
 | **/go-code**       | Go code quality standards, idioms, and YAGNI/KISS.         |
 | **/jira**          | Retrieve a Jira ticket and convert to markdown.            |
 | **/make**          | Run or discover Makefile targets for build automation.     |

@@ -1,6 +1,6 @@
 {
   "name": "gosmith",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Specialized agents and skills for Go development, infrastructure automation, and workflow management",
   "author": {
     "name": "Otávio Fernandes",

@@ -31,17 +31,18 @@ Invoke when writing or reviewing Go code. The skill provides canonical patterns 
 
 **Directive:** Use `/make` skill for Makefile operations. Fall back to raw Go commands only when no Makefile exists.
 
-**Skill invocation:**
-- `/make --list` — Discover available targets
-- `/make <target>` — Execute target
-- `/make` — Run default target
+**Skill invocation:** `/make --list` | `/make <target>` | `/make` (default target)
 
 **Principles:**
-1. **Skill-first:** Invoke `/make --list` before running commands
-2. **Target reuse:** Depend on existing targets rather than duplicating
-3. **Graceful fallback:** Skill handles missing Makefile automatically
 
-**Scripts:** Scripts NEVER call `make`. Makefile orchestrates via target dependencies.
+| Principle | Application |
+|-----------|-------------|
+| Skill-first | Invoke `/make --list` before running commands |
+| Target reuse | Depend on existing targets; don't duplicate |
+| Graceful fallback | Skill handles missing Makefile automatically |
+| Scripts isolation | Scripts NEVER call `make`; Makefile orchestrates |
+
+**Makefile structure:** See `/make` skill for single-source-of-authority principle, modular `include` patterns, and anti-patterns (recursive make).
 
 ## PLAN.md
 

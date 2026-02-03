@@ -30,3 +30,24 @@ model: haiku
    - No Makefile: "No Makefile found in current or parent directories"
    - Target not found: List available targets
    - Make failure: Report exit code and last 10 lines of stderr
+
+## Makefile Principles
+
+| Principle | Guidance |
+|-----------|----------|
+| **Single source of authority** | Makefile is canonical entry point for all project automation |
+| **Modular via include** | Split into `build/*.mk` files; all form unified dependency graph |
+| **Not universal** | Some projects use raw `go`, `build.sh`, or task runners (`just`, `task`) |
+
+## Anti-Pattern: Recursive Make
+
+```makefile
+# WRONG — parallel automation hierarchies
+$(MAKE) -C subdir clean
+
+# RIGHT — unified via include
+include subdir/subdir.mk
+clean: subdir-clean
+```
+
+`include` maintains single dependency graph; recursive `$(MAKE)` breaks it.

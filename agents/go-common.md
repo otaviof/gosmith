@@ -8,9 +8,7 @@ description: "Common policies for Go agents. Referenced by go-architect, go-deve
 
 ## Code Quality
 
-**Directive:** Use `/go-code` skill for idioms, naming conventions, style guide, and YAGNI/KISS principles.
-
-Invoke when writing or reviewing Go code. The skill provides canonical patterns for error handling, interfaces, context usage, and anti-patterns.
+**Directive:** Use `/go-code` skill for idioms, naming, style, error handling, and YAGNI/KISS principles.
 
 ## Design Philosophy
 
@@ -27,22 +25,36 @@ Invoke when writing or reviewing Go code. The skill provides canonical patterns 
 
 **Minimum:** Go 1.21+ | **Default:** Go 1.23+ (per `go.mod`). Enables: `slices`/`maps`/`cmp`, range-over-func, fuzz.
 
+## Tool Versioning via `go tool`
+
+**Directive:** Use `go tool` (Go 1.24+) over `go install` for reproducible tooling.
+
+| Aspect | `go install` | `go tool` |
+|--------|--------------|-----------|
+| Version tracking | Manual or none | Automatic in `go.mod` |
+| Reproducibility | `@latest` is mutable | Exact version pinned |
+| Binary location | `${GOPATH}/bin` (shared) | Module cache (isolated) |
+| Team consistency | Requires discipline | Enforced by module |
+| Checksums | Not verified | Verified via `go.sum` |
+
+**Setup:** `go get -tool <package>@<version>` — adds tool dependency to `go.mod`
+
+**Execute:** `go tool <name> [args]` — runs tool using pinned version
+
+**Use for:** linters (`golangci-lint`), generators (`protoc-gen-go`), release tools (`goreleaser`)
+
 ## Automation via Makefile
 
 **Directive:** Use `/make` skill for Makefile operations. Fall back to raw Go commands only when no Makefile exists.
 
-**Skill invocation:** `/make --list` | `/make <target>` | `/make` (default target)
-
-**Principles:**
-
 | Principle | Application |
 |-----------|-------------|
+| Invocation | `/make --list` \| `/make <target>` \| `/make` (default) |
 | Skill-first | Invoke `/make --list` before running commands |
 | Target reuse | Depend on existing targets; don't duplicate |
 | Graceful fallback | Skill handles missing Makefile automatically |
 | Scripts isolation | Scripts NEVER call `make`; Makefile orchestrates |
-
-**Makefile structure:** See `/make` skill for single-source-of-authority principle, modular `include` patterns, and anti-patterns (recursive make).
+| Structure | See `/make` skill for modular `include` patterns |
 
 ## PLAN.md
 
@@ -55,13 +67,12 @@ PLAN.md **Implementation Steps** table is source of truth.
 
 **Status:** `pending` → `in-progress` → `done` | `blocked: <reason>`
 
-| Agent        | Responsibility                                              |
-| ------------ | ----------------------------------------------------------- |
-| go-developer | Mark `in-progress` before starting, `done` after tests pass |
-| go-tester    | Update testing steps, flag `blocked` if untestable          |
-| go-reviewer  | Mark `done` on approval, `blocked` if changes requested     |
-
-On handoff: ensure your steps are `done` before passing to next agent.
+| Agent        | Responsibility                                                        |
+| ------------ | --------------------------------------------------------------------- |
+| go-developer | Mark `in-progress` before starting, `done` after tests pass           |
+| go-tester    | Update testing steps, flag `blocked` if untestable                    |
+| go-reviewer  | Mark `done` on approval, `blocked` if changes requested               |
+| *All agents* | Ensure steps `done` before handoff                                    |
 
 ## Workflow
 

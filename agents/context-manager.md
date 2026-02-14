@@ -29,7 +29,7 @@ Maintain coherent state across agent interactions and sessions. Optimize for rel
 | Full | <2000 tokens | Architecture, key decisions, integration points |
 | Archive | Unlimited | Historical decisions, resolved issues, patterns |
 
-Per [mcrf.md](mcrf.md) for structured reasoning.
+Per [mcrf.md](mcrf.md) for structured reasoning. [execution-discipline.md](execution-discipline.md) for behavioral guardrails.
 
 # Output Contract
 

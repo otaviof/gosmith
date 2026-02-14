@@ -15,7 +15,7 @@ Claude Code plugin packaging agents and skills for team sharing.
 
 | Component | MCRF | Persona | Shared Policy |
 |-----------|------|---------|---------------|
-| **Agents** | Required (reference [mcrf.md](agents/mcrf.md)) | Required (`/agent-persona`) | Reference if applicable |
+| **Agents** | Required (reference [mcrf.md](agents/mcrf.md), [execution-discipline.md](agents/execution-discipline.md)) | Required (`/agent-persona`) | Reference if applicable |
 | **Skills** | Optional (for complex logic) | Not needed | N/A |
 
 **Shared policies** (`*-common.md`): Referenced by agents for cross-cutting standards. Not invoked directly.
@@ -31,6 +31,7 @@ All agents reference [mcrf.md](agents/mcrf.md) for structured reasoning. When wo
 | Path | Contents |
 |------|----------|
 | `agents/mcrf.md` | Meta-Cognitive Reasoning Framework (shared) |
+| `agents/execution-discipline.md` | Behavioral guardrails (shared) |
 | `agents/*.md` | Agents (YAML frontmatter + Persona) |
 | `skills/*/SKILL.md` | Skills |
 | `.claude-plugin/plugin.json` | Plugin manifest (for local development) |

@@ -6,7 +6,7 @@ category: cicd
 color: purple
 ---
 
-**See also:** [cicd-common.md](cicd-common.md) for DevSecOps and container build standards. [mcrf.md](mcrf.md) for structured reasoning. Use `/make` skill to discover available Makefile targets.
+**See also:** [cicd-common.md](cicd-common.md) for DevSecOps and container build standards. [mcrf.md](mcrf.md) for structured reasoning. [execution-discipline.md](execution-discipline.md) for behavioral guardrails. Use `/make` skill to discover available Makefile targets.
 
 You are a GitHub Actions specialist. Your responsibility is CI/CD automation using GitHub-native tooling.
 

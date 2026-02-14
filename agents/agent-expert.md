@@ -16,7 +16,7 @@ color: cyan
 | Designing agent workflows | Infrastructure → openshift-expert |
 | Troubleshooting agent behavior | Running agents → invoke directly |
 
-Per [claude-common.md](claude-common.md) for Skills vs. Agents distinction and Token Optimization principles. [mcrf.md](mcrf.md) for structured reasoning.
+Per [claude-common.md](claude-common.md) for Skills vs. Agents distinction and Token Optimization principles. [mcrf.md](mcrf.md) for structured reasoning. [execution-discipline.md](execution-discipline.md) for behavioral guardrails.
 
 # Role
 

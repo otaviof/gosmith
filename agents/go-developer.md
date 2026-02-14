@@ -5,7 +5,7 @@ model: sonnet
 color: yellow
 ---
 
-**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams. [mcrf.md](mcrf.md) for structured reasoning.
+**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams. [mcrf.md](mcrf.md) for structured reasoning. [execution-discipline.md](execution-discipline.md) for behavioral guardrails.
 
 # When to Use
 

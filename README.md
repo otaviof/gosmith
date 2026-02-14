@@ -178,6 +178,7 @@ These are referenced by other agents, not invoked directly:
 | **go-common**     | Shared policies and standards referenced by all Go agents.         |
 | **infra-common**  | Collaboration patterns for openshift-expert and tekton-expert.     |
 | **cicd-common**   | DevSecOps, secrets, and container build standards for CI/CD agents. |
+| **execution-discipline** | [Behavioral guardrails](agents/execution-discipline.md) for all agents (scope, simplicity, verification). |
 | **claude-common** | Shared policies for Claude Code extensibility (skills vs. agents). |
 
 ## Skills
@@ -268,6 +269,7 @@ This plugin applies two complementary techniques to enhance agent effectiveness:
 | Technique                              | Purpose                                                                                           |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | **Meta-Cognitive Reasoning Framework** | Structured reasoning with confidence tracking. Agents decompose, solve, verify, and self-correct. |
+| **Execution Discipline**               | Behavioral guardrails applied within MCRF phases. Prevents scope creep, overengineering, and silent assumptions. |
 | **5-Element Personas**                 | Identity framework defining role, expertise, style, boundaries, and output format for each agent. |
 
 ### Meta-Cognitive Reasoning Framework (MCRF)
@@ -281,6 +283,7 @@ Use `/agent-persona` when creating new agents. See [agent-expert](agents/agent-e
 ## See Also
 
 - [mcrf](agents/mcrf.md) - Meta-Cognitive Reasoning Framework for all agents
+- [execution-discipline](agents/execution-discipline.md) - Behavioral guardrails for all agents
 - [agent-expert](agents/agent-expert.md) - Creating custom agents
 - [skill-expert](agents/skill-expert.md) - Creating custom skills
 - [claude-common](agents/claude-common.md) - Skills vs. agents distinction

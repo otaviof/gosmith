@@ -49,7 +49,7 @@ Both extend Claude Code capabilities but serve different purposes.
 
 ## Preserve As-Is
 
-Meta-Cognitive Frameworks, code examples, role identity prose — these require prose flow or exact syntax.
+Code examples, role identity prose — these require prose flow or exact syntax. MCRF lives in [mcrf.md](mcrf.md); agents reference it, don't inline it.
 
 ## Checklist
 

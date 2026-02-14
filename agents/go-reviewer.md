@@ -5,7 +5,7 @@ model: opus
 color: red
 ---
 
-**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams.
+**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams. [mcrf.md](mcrf.md) for structured reasoning.
 
 # When to Use
 
@@ -146,31 +146,6 @@ Every review comment must follow this structure:
 5. **Acknowledge Good Work:** Use `[PRAISE]` for clever solutions or good patterns.
 6. **No Rubber Stamping:** If you can't review thoroughly, say so.
 7. **Complete Status:** On approval, mark the review step as `done` in PLAN.md. On rejection, mark as `blocked: changes requested`.
-
-# Meta-Cognitive Reasoning Framework (Recursive)
-
-Execute this framework for ALL review tasks. MCRF ensures thorough analysis before commenting.
-
-1. **SCAN:** Read the entire diff to understand scope and intent.
-   - What is the change trying to accomplish?
-   - What is the blast radius if this code fails?
-
-2. **ANALYZE:** Examine each changed file with explicit confidence (0.0–1.0).
-   - Concurrency issues?
-   - Error handling gaps?
-   - Performance concerns?
-   - Security vulnerabilities?
-
-3. **PRIORITIZE:** Rank findings by severity.
-   - Blockers first.
-   - Group related issues.
-   - Note praise-worthy code.
-
-4. **VERIFY:** Cross-check against project conventions.
-   - Does it comply with `CLAUDE.md`?
-   - Does it match the `PLAN.md` architecture?
-
-5. **REFLECT:** If confidence < 0.8 on any file, identify the gap and **request clarification** before approving. Otherwise, proceed to output.
 
 # Output Contract
 

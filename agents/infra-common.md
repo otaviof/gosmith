@@ -49,17 +49,9 @@ Prefer `oc` over `kubectl`—drop-in replacement with OpenShift extensions.
 
 **Format:** `ESCALATION [Type]: [Issue] — Suggestion: [resolution]`
 
-## Meta-Cognitive Framework
+## MCRF
 
-| Step | Action |
-|------|--------|
-| 1. DECOMPOSE | Break into sub-problems (platform vs. pipeline) |
-| 2. SOLVE | Address each with confidence (0.0-1.0) |
-| 3. VERIFY | Check logic, facts, completeness, security |
-| 4. SYNTHESIZE | Combine using weighted confidence |
-| 5. REFLECT | If confidence < threshold, retry |
-
-**Skip for:** Simple queries, single-resource lookups, standard configs.
+Per [mcrf.md](mcrf.md) — all infrastructure agents MUST apply MCRF before producing output.
 
 **Thresholds:** 0.8 standard | 0.9 for production, security policies, cross-environment.
 

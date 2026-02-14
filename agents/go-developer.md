@@ -5,7 +5,7 @@ model: sonnet
 color: yellow
 ---
 
-**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams.
+**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams. [mcrf.md](mcrf.md) for structured reasoning.
 
 # When to Use
 
@@ -63,31 +63,6 @@ Per [go-common.md](go-common.md) and `/go-code` skill (for idioms, naming, YAGNI
 4. **Output:** Terminal-friendly, concise, standard backticks for code
 5. **Safety:** No commits unless explicitly prompted
 6. **Blockers:** Update status to `blocked: <reason>`, report issue
-
-# Meta-Cognitive Reasoning Framework (Recursive)
-
-Execute this framework for ALL implementation tasks. MCRF ensures code correctness before writing.
-
-1. **PARSE:** Extract the exact requirements from the plan for this step.
-   - What interfaces must be satisfied?
-   - What data models are involved?
-   - What are the algorithmic constraints (O(n), memory)?
-
-2. **IMPLEMENT:** Write the code with explicit confidence (0.0–1.0).
-   - Does this satisfy the interface contract?
-   - Are error boundaries correctly implemented?
-
-3. **VERIFY:**
-   - **Race Detection:** Run a mental `go test -race`. Are there shared state issues?
-   - **Leak Check:** Do all goroutines have exit conditions?
-   - **Interface Compliance:** Does the implementation accept interfaces, return structs?
-   - **Edge Cases:** Does the code handle nil, empty, and boundary inputs?
-
-4. **SYNTHESIZE:** Integrate with existing components.
-   - Does DI wiring work correctly?
-   - Are dependencies properly injected?
-
-5. **REFLECT:** If confidence < 0.8, identify the weakness and **retry from step 1**. Otherwise, proceed to output.
 
 # Output Contract
 

@@ -5,7 +5,7 @@ model: opus
 color: green
 ---
 
-**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams.
+**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams. [mcrf.md](mcrf.md) for structured reasoning.
 
 # When to Use
 
@@ -94,31 +94,6 @@ Each step must be:
 - **Atomic:** Completable in one agent session
 - **Testable:** Verifiable via `go test` or manual inspection
 - **Traceable:** Maps to specific interfaces/types defined above
-
-# Meta-Cognitive Reasoning Framework (Recursive)
-
-Execute this framework for ALL design requests. MCRF ensures architectural rigor before plan generation.
-
-1. **DECOMPOSE:** Break into sub-problems.
-   - Separate Domain Logic (pure Go) from Infrastructure (I/O, frameworks)
-   - Identify components that can be designed independently
-
-2. **SOLVE:** Address each sub-problem with confidence score (0.0–1.0).
-   - Specify algorithmic constraints (O(n) bounds, memory limits)
-   - Assign confidence based on requirement clarity
-
-3. **MODEL:** Define strict types as the protocol between components.
-
-4. **VERIFY:** Check each sub-solution:
-   - **Logic** — Does the design hold under edge cases?
-   - **Facts** — Are assumptions about Go runtime/stdlib correct?
-   - **Completeness** — Are all requirements addressed?
-
-5. **SYNTHESIZE:** Combine sub-solutions.
-   - Compile into the markdown format above
-   - Final confidence = weighted average of sub-problem confidences
-
-6. **REFLECT:** If confidence < 0.8, identify the weakest sub-problem and retry from step 1. Otherwise, proceed to output.
 
 # Output Contract
 

@@ -99,37 +99,9 @@ go-architect (PLAN.md) → go-developer (*.go) → go-tester (*_test.go) → go-
 | Reviewer rounds         | 3     | Sync meeting required      |
 | Tester critical bugs    | 5     | Pause and re-architect     |
 
-## Confidence Scoring
+## MCRF
 
-| Score    | Meaning   | Action               |
-| -------- | --------- | -------------------- |
-| 0.9-1.0  | High      | Proceed              |
-| 0.8-0.89 | OK        | Proceed with caveats |
-| 0.7-0.79 | Uncertain | Flag concerns        |
-| < 0.7    | Low       | Stop, ask questions  |
-
-**Risk thresholds:** Low (0.7): docs, refactoring | Standard (0.8): features, fixes | High (0.9): security, concurrency
-
-## Meta-Cognitive Reasoning Framework (MCRF)
-
-All Go agents MUST apply MCRF before producing output. Each agent adapts step names to its domain.
-
-| Step          | Action                                                       |
-| ------------- | ------------------------------------------------------------ |
-| 1. DECOMPOSE  | Break into sub-problems; separate domain from infrastructure |
-| 2. SOLVE      | Address each with confidence (0.0-1.0)                       |
-| 3. VERIFY     | Check logic, facts (Go runtime/stdlib), completeness         |
-| 4. SYNTHESIZE | Combine using weighted confidence; flag low-confidence areas |
-| 5. REFLECT    | If confidence < threshold, identify weakness and retry       |
-
-**Mandatory:** MCRF ensures reasoning rigor. For trivial operations (typos, single-line fixes), apply lightweight MCRF (skip to VERIFY/REFLECT).
-
-| Agent        | Step 1 Name | Focus                           |
-| ------------ | ----------- | ------------------------------- |
-| go-architect | DECOMPOSE   | Interfaces, packages, contracts |
-| go-developer | PARSE       | Requirements from PLAN.md       |
-| go-tester    | ANALYZE     | Testable contracts, edge cases  |
-| go-reviewer  | SCAN        | Blast radius, compliance        |
+Per [mcrf.md](mcrf.md) — all Go agents MUST apply MCRF before producing output. Use 0.9 threshold for concurrency and security.
 
 ## File Naming
 

@@ -29,31 +29,7 @@ Maintain coherent state across agent interactions and sessions. Optimize for rel
 | Full | <2000 tokens | Architecture, key decisions, integration points |
 | Archive | Unlimited | Historical decisions, resolved issues, patterns |
 
-# Meta-Cognitive Reasoning
-
-For complex context decisions, apply structured reasoning:
-
-1. **ASSESS** — Evaluate context state
-   - Token budget (Quick/Full/Archive)
-   - Target agents
-   - In-flight vs. resolved decisions
-
-2. **COMPRESS** — Reduce with confidence scoring (0.0-1.0)
-   - Remove redundant/superseded info
-   - Preserve rationale over implementation details
-
-3. **PRESERVE** — Protect critical context
-   - Unresolved blockers, dependencies
-   - Architectural decisions with rationale
-   - Active task state and ownership
-
-4. **VALIDATE** — Check completeness
-   - Can next agent proceed without gaps?
-   - Are referenced artifacts still accurate?
-
-5. **REFLECT** — If confidence < 0.8, identify gaps and retry
-
-**Skip for:** Simple handoffs, quick status updates.
+Per [mcrf.md](mcrf.md) for structured reasoning.
 
 # Output Contract
 

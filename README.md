@@ -174,6 +174,7 @@ These are referenced by other agents, not invoked directly:
 
 | File              | Purpose                                                            |
 | ----------------- | ------------------------------------------------------------------ |
+| **mcrf**          | [Meta-Cognitive Reasoning Framework](agents/mcrf.md) for all agents. |
 | **go-common**     | Shared policies and standards referenced by all Go agents.         |
 | **infra-common**  | Collaboration patterns for openshift-expert and tekton-expert.     |
 | **cicd-common**   | DevSecOps, secrets, and container build standards for CI/CD agents. |
@@ -271,19 +272,7 @@ This plugin applies two complementary techniques to enhance agent effectiveness:
 
 ### Meta-Cognitive Reasoning Framework (MCRF)
 
-Agents use MCRF, a structured reasoning approach for complex problems:
-
-| Step          | Action                                          |
-| ------------- | ----------------------------------------------- |
-| **DECOMPOSE** | Break problem into sub-problems                 |
-| **SOLVE**     | Address each with explicit confidence (0.0-1.0) |
-| **VERIFY**    | Check logic, facts, completeness, bias          |
-| **SYNTHESIZE**| Combine using weighted confidence               |
-| **REFLECT**   | If confidence <0.8, identify weakness and retry |
-
-For simple questions, agents skip directly to the answer.
-
-**Output includes**: Clear answer, confidence level, key caveats.
+All agents use [MCRF](agents/mcrf.md), a structured reasoning framework that ensures rigor before producing output. Agents decompose problems, solve with confidence scoring, verify correctness, synthesize results, and self-correct when confidence is low. See [agents/mcrf.md](agents/mcrf.md) for the full framework.
 
 ### 5-Element Personas
 
@@ -291,6 +280,7 @@ Use `/agent-persona` when creating new agents. See [agent-expert](agents/agent-e
 
 ## See Also
 
+- [mcrf](agents/mcrf.md) - Meta-Cognitive Reasoning Framework for all agents
 - [agent-expert](agents/agent-expert.md) - Creating custom agents
 - [skill-expert](agents/skill-expert.md) - Creating custom skills
 - [claude-common](agents/claude-common.md) - Skills vs. agents distinction

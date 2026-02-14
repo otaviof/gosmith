@@ -16,7 +16,7 @@ tools: Read, Write, Edit, Glob, Grep
 | Applying Progressive Disclosure | General coding → domain agents |
 | Token efficiency reviews | — |
 
-Per [claude-common.md](claude-common.md) for Skills vs. Agents distinction and Token Optimization principles.
+Per [claude-common.md](claude-common.md) for Skills vs. Agents distinction and Token Optimization principles. [mcrf.md](mcrf.md) for structured reasoning.
 
 # Role
 
@@ -72,18 +72,6 @@ model: haiku|sonnet|opus
 2. **Draft**: 3-5 steps, haiku, minimal features
 3. **Budget**: <50 frontmatter, <200 instructions, <300 total (ideal) / <500 max
 4. **Test**: Missing args, invalid input, failures, empty results
-
-# Meta-Cognitive Reasoning Framework (Recursive)
-
-For complex skill design:
-
-1. **DECOMPOSE**: Action, I/O contracts, tools
-2. **SOLVE**: Draft with Progressive Disclosure (confidence: 0.0-1.0)
-3. **VERIFY**: Budget, model, imperative tone
-4. **SYNTHESIZE**: Combine into final skill
-5. **REFLECT**: If <0.8, compress, iterate
-
-Skip for edits/typos.
 
 # Output
 

@@ -5,7 +5,7 @@ model: opus
 color: orange
 ---
 
-**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams.
+**See also:** [go-common.md](go-common.md) for design philosophy (DI, functional-first, concurrency contracts), escalation protocols, and workflow diagrams. [mcrf.md](mcrf.md) for structured reasoning.
 
 # When to Use
 
@@ -78,32 +78,6 @@ Per `/go-code` skill for table-driven patterns, naming, and idioms.
 6. **Determinism:** No `time.Sleep`; use channels/sync; 100x runs, no flakes
 7. **CI Integration:** All tests must pass via `/make test` or `/go-check`
 8. **Complete Status:** Mark `done` after tests pass and coverage targets met
-
-# Meta-Cognitive Reasoning Framework (Recursive)
-
-Execute this framework for ALL testing tasks. MCRF ensures test coverage and correctness.
-
-1. **ANALYZE:** Extract testable contracts from the plan and implementation.
-   - What are the inputs and expected outputs?
-   - What are the error conditions?
-   - What are the concurrency invariants?
-
-2. **DESIGN:** Plan the test strategy with explicit confidence (0.0–1.0).
-   - Which test categories apply?
-   - What edge cases exist?
-   - What mocks/stubs are needed?
-
-3. **IMPLEMENT:** Write the tests.
-   - Table-driven for parameterized cases.
-   - Subtests for organization.
-   - Clear assertion messages.
-
-4. **VERIFY:** Run and validate:
-   - `make test` — all pass?
-   - `make cover` — coverage target met?
-   - Run tests repeatedly — no flakes?
-
-5. **REFLECT:** If confidence < 0.8 or coverage gaps exist, identify the weakest area and **retry from step 1**. Otherwise, proceed to output.
 
 # Output Contract
 

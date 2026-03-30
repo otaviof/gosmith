@@ -8,159 +8,198 @@ Usage: jira.py TICKET-KEY [--comments N]
 
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import subprocess
 import sys
-
-_ANSI_RE = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
-_SECTION_SEP_RE = re.compile(r"^-{10,}.*[A-Za-z].*-{10,}$")
-_DESC_SEP_RE = re.compile(r"^-{10,}.*[Dd]escription.*-{10,}$")
-_COMMENT_SEP_RE = re.compile(r"^-{10,}.*[Cc]omment.*-{10,}$")
-_FOOTER_RE = re.compile(r"^View this issue on Jira:")
-_STATUS_RE = re.compile(r"\s{2}\S+\s+(.+?)\s{2,}\u231b")
+from typing import Any
 
 
-def jira_to_md(text: str) -> str:
-    """Convert remaining Jira wiki markup that survives --plain rendering."""
-    # {{text}} → `text` (inline code) — handles multi-line spans too.
-    text = re.sub(r"\{\{(.+?)\}\}", r"`\1`", text, flags=re.DOTALL)
+def adf_to_markdown(node: dict[str, Any], context: dict[str, Any] | None = None) -> str:
+    """Convert Atlassian Document Format (ADF) to markdown.
 
-    # Admonition blocks: {tag}...{tag} → blockquote with label.
-    for tag, label in [
-        ("note", "Note"),
-        ("warning", "Warning"),
-        ("tip", "Tip"),
-        ("info", "Info"),
-    ]:
-        pattern = re.compile(r"\{" + tag + r"\}(.*?)\{" + tag + r"\}", re.DOTALL)
-        text = pattern.sub(r"> **" + label + r":** \1", text)
-        # Handle unpaired (orphan) opening tags.
-        text = text.replace("{" + tag + "}", f"> **{label}:** ")
+    Args:
+        node: ADF node (dict with type, content, attrs, marks, text fields)
+        context: Optional context for tracking state (list depth, table mode, etc.)
 
-    # {code}...{code}, {noformat} → fenced code blocks.
-    text = re.sub(r"\{code(:[^}]*)?\}", "```", text)
-    text = text.replace("{noformat}", "```")
-
-    # [text|url] → [text](url) (Jira link format).
-    text = re.sub(r"\[([^|]*)\|([^]]*)\]", r"[\1](\2)", text)
-
-    return text
-
-
-def join_paragraphs(raw_lines: list[str]) -> str:
-    """Join wrapped lines into proper paragraphs.
-
-    The jira-cli wraps text at column width.  This function joins consecutive
-    non-blank lines, keeping structural elements (headings, separators, table
-    rows, code fences) on their own lines while merging prose and bullet
-    continuations.
+    Returns:
+        Markdown string
     """
-    standalone_re = re.compile(r"^(#{1,6}\s|```|-{3,})")
-    table_row_re = re.compile(r"^.+\|.+$")
-    table_cont_re = re.compile(r"^\|")
-    block_start_re = re.compile(r"^([•\-*+]\s|\d+\.\s|>)")
+    if context is None:
+        context = {"list_depth": 0, "in_table": False}
 
-    result: list[str] = []
-    buf: list[str] = []
+    node_type = node.get("type", "")
+    content = node.get("content", [])
+    attrs = node.get("attrs", {})
+    text = node.get("text", "")
+    marks = node.get("marks", [])
 
-    def flush() -> None:
-        if buf:
-            result.append(" ".join(buf))
-            buf.clear()
+    # Text nodes with marks
+    if node_type == "text":
+        result = text
+        # Apply marks in order: code, strong, em, link, etc.
+        for mark in marks:
+            mark_type = mark.get("type", "")
+            if mark_type == "code":
+                result = f"`{result}`"
+            elif mark_type == "strong":
+                result = f"**{result}**"
+            elif mark_type == "em":
+                result = f"*{result}*"
+            elif mark_type == "link":
+                href = mark.get("attrs", {}).get("href", "")
+                result = f"[{result}]({href})"
+            elif mark_type == "strike":
+                result = f"~~{result}~~"
+        return result
 
-    for line in raw_lines:
-        if not line.strip():
-            flush()
-            result.append("")
-        elif (
-            standalone_re.match(line)
-            or table_row_re.match(line)
-            or table_cont_re.match(line)
-        ):
-            flush()
-            result.append(line)
-        elif block_start_re.match(line):
-            flush()
-            buf.append(line)
+    # Block elements
+    if node_type == "doc":
+        return "".join(adf_to_markdown(child, context) for child in content)
+
+    elif node_type == "paragraph":
+        if context.get("in_list_item"):
+            # Don't add extra newlines inside list items
+            return "".join(adf_to_markdown(child, context) for child in content)
+        return "".join(adf_to_markdown(child, context) for child in content) + "\n\n"
+
+    elif node_type == "heading":
+        level = attrs.get("level", 1)
+        heading_text = "".join(adf_to_markdown(child, context) for child in content)
+        return f"{'#' * level} {heading_text}\n\n"
+
+    elif node_type == "codeBlock":
+        language = attrs.get("language", "")
+        code_text = "".join(adf_to_markdown(child, context) for child in content)
+        # Ensure code block ends with newline before closing backticks
+        if code_text and not code_text.endswith("\n"):
+            code_text += "\n"
+        return f"```{language}\n{code_text}```\n\n"
+
+    elif node_type == "bulletList":
+        context["list_depth"] += 1
+        result = "".join(adf_to_markdown(child, context) for child in content)
+        context["list_depth"] -= 1
+        return result + ("\n" if context["list_depth"] == 0 else "")
+
+    elif node_type == "orderedList":
+        context["list_depth"] += 1
+        # Save previous counter if exists (for nested lists)
+        prev_counter = context.get("list_counter")
+        context["list_counter"] = attrs.get("order", 1)
+        result = "".join(adf_to_markdown(child, context) for child in content)
+        # Restore previous counter or remove it
+        if prev_counter is not None:
+            context["list_counter"] = prev_counter
         else:
-            buf.append(line)
+            context.pop("list_counter", None)
+        context["list_depth"] -= 1
+        return result + ("\n" if context["list_depth"] == 0 else "")
 
-    flush()
-    return "\n".join(result)
+    elif node_type == "listItem":
+        indent = "  " * (context["list_depth"] - 1)
+        context["in_list_item"] = True
+        item_content = "".join(adf_to_markdown(child, context) for child in content)
+        context["in_list_item"] = False
+
+        # Determine bullet style
+        if "list_counter" in context:
+            bullet = f"{context['list_counter']}."
+            context["list_counter"] += 1
+        else:
+            bullet = "-"
+
+        # Handle multi-paragraph list items
+        lines = item_content.strip().split("\n\n")
+        if len(lines) > 1:
+            first = f"{indent}{bullet} {lines[0]}\n"
+            rest = "\n\n".join(f"{indent}  {line}" for line in lines[1:])
+            return first + rest + "\n"
+        return f"{indent}{bullet} {item_content.strip()}\n"
+
+    elif node_type == "blockquote":
+        quoted = "".join(adf_to_markdown(child, context) for child in content)
+        # Prefix each line with >
+        lines = quoted.strip().split("\n")
+        return "\n".join(f"> {line}" for line in lines) + "\n\n"
+
+    elif node_type == "rule":
+        return "---\n\n"
+
+    elif node_type == "table":
+        context["in_table"] = True
+        rows = [adf_to_markdown(child, context) for child in content]
+        context["in_table"] = False
+
+        # Build markdown table
+        if not rows:
+            return ""
+
+        # First row is header, add separator after it
+        result = rows[0]
+        # Count columns from first row
+        col_count = rows[0].count("|") - 1
+        result += "| " + " | ".join(["---"] * col_count) + " |\n"
+        result += "".join(rows[1:])
+        return result + "\n"
+
+    elif node_type == "tableRow":
+        cells = [adf_to_markdown(child, context) for child in content]
+        return "| " + " | ".join(cells) + " |\n"
+
+    elif node_type in ("tableHeader", "tableCell"):
+        return "".join(adf_to_markdown(child, context) for child in content).strip()
+
+    elif node_type == "hardBreak":
+        return "\n"
+
+    elif node_type == "panel":
+        # Jira panels (info, warning, note, etc.) -> blockquotes
+        panel_type = attrs.get("panelType", "info")
+        panel_content = "".join(adf_to_markdown(child, context) for child in content)
+        label = panel_type.capitalize()
+        lines = panel_content.strip().split("\n")
+        result = f"> **{label}:** {lines[0]}\n" if lines else f"> **{label}:**\n"
+        for line in lines[1:]:
+            result += f"> {line}\n"
+        return result + "\n"
+
+    # Default: process children
+    return "".join(adf_to_markdown(child, context) for child in content)
 
 
-def strip_ansi(raw: str) -> list[str]:
-    """Strip ANSI escape codes and trim each line."""
-    return [_ANSI_RE.sub("", line).strip() for line in raw.splitlines()]
+def extract_comments(raw_data: dict[str, Any], limit: int | None = None) -> str:
+    """Extract and format comments from raw Jira API response."""
+    comments_data = raw_data.get("fields", {}).get("comment", {}).get("comments", [])
 
+    if not comments_data:
+        return ""
 
-def trim_blank_edges(lines: list[str]) -> list[str]:
-    """Remove leading and trailing blank lines from a list."""
-    while lines and not lines[0].strip():
-        lines.pop(0)
-    while lines and not lines[-1].strip():
-        lines.pop()
-    return lines
+    if limit is not None:
+        comments_data = comments_data[:limit]
 
+    result = []
+    for comment in comments_data:
+        author = comment.get("author", {}).get("displayName", "Unknown")
+        created = comment.get("created", "")[:10]  # Just the date part
+        body = comment.get("body", {})
 
-def extract_title(lines: list[str], fallback: str) -> str:
-    """Return the first ``# heading`` text, or *fallback*."""
-    for line in lines:
-        if line.startswith("# "):
-            return line[2:]
-    return fallback
+        if body and body.get("type") == "doc":
+            body_md = adf_to_markdown(body)
+            result.append(f"**{author}** ({created}):\n\n{body_md}")
 
-
-def extract_link(lines: list[str]) -> str:
-    """Return the last URL found in *lines* (typically the Jira link)."""
-    for line in reversed(lines):
-        m = re.search(r"https://\S+", line)
-        if m:
-            return m.group(0)
-    return ""
-
-
-def extract_status(lines: list[str]) -> str:
-    """Parse the status from the first non-blank metadata line."""
-    for line in lines:
-        if line.strip():
-            m = _STATUS_RE.search(line)
-            return m.group(1) if m else "Unknown"
-    return "Unknown"
-
-
-def extract_section(
-    lines: list[str],
-    start_re: re.Pattern[str],
-    stop_re: re.Pattern[str] | None = None,
-) -> list[str]:
-    """Return lines between *start_re* and the next named separator / footer."""
-    result: list[str] = []
-    capturing = False
-    for line in lines:
-        if start_re.match(line):
-            capturing = True
-            continue
-        if not capturing:
-            continue
-        if _SECTION_SEP_RE.match(line) and "|" not in line:
-            break
-        if _FOOTER_RE.match(line):
-            break
-        if stop_re and stop_re.match(line):
-            continue
-        result.append(line)
-    return trim_blank_edges(result)
+    return "\n---\n\n".join(result)
 
 
 def die(msg: str) -> None:
+    """Print error and exit."""
     print(f"Error: {msg}", file=sys.stderr)
     sys.exit(1)
 
 
-def parse_args(argv: list[str]) -> tuple[str, str | None]:
-    """Parse CLI arguments and return ``(key, comments_n)``."""
+def parse_args(argv: list[str]) -> tuple[str, int | None]:
+    """Parse CLI arguments and return (key, comments_limit)."""
     args = list(argv)
     if not args:
         die("Usage: jira.py TICKET-KEY [--comments N]")
@@ -169,94 +208,88 @@ def parse_args(argv: list[str]) -> tuple[str, str | None]:
     if not re.match(r"^[A-Z]+-[0-9]+$", key):
         die(f"Invalid ticket key '{key}'. Expected format: PROJ-123")
 
-    comments_n: str | None = None
+    comments_n: int | None = None
     while args:
         if args[0] == "--comments":
             args.pop(0)
             if not args:
                 die("--comments requires a number")
-            comments_n = args.pop(0)
+            try:
+                comments_n = int(args.pop(0))
+            except ValueError:
+                die(f"Invalid number for --comments: {args[0]}")
         else:
             die(f"Unknown argument '{args[0]}'")
 
     return key, comments_n
 
 
-def fetch_ticket(key: str, comments_n: str | None = None) -> str:
-    """Run ``jira issue view`` and return raw stdout."""
+def fetch_ticket(key: str) -> dict[str, Any]:
+    """Fetch ticket data from Jira CLI and return parsed JSON."""
     if not shutil.which("jira"):
-        die("Jira ('jira') CLI not found. " +
-            "Install: https://github.com/ankitpokhrel/jira-cli")
+        die(
+            "jira CLI not found. "
+            "Install: https://github.com/ankitpokhrel/jira-cli"
+        )
 
-    cmd = ["jira", "issue", "view", key, "--plain"]
-    if comments_n is not None:
-        cmd += ["--comments", comments_n]
-
+    cmd = ["jira", "issue", "view", key, "--raw"]
     result = subprocess.run(cmd, capture_output=True, text=True)
+
     if result.returncode != 0:
         die(f"Failed to fetch {key}: {result.stderr.strip()}")
-    return result.stdout
 
-
-def write_markdown(
-    path: str,
-    *,
-    title: str,
-    status: str,
-    link: str,
-    body: str,
-    comments: str,
-) -> None:
-    """Write the final markdown file with YAML frontmatter."""
-    yaml_title = title.replace('"', '\\"')
-    with open(path, "w") as f:
-        f.write("---\n")
-        f.write(f'Title: "{yaml_title}"\n')
-        f.write(f"Status: {status}\n")
-        if link:
-            f.write(f"Link: {link}\n")
-        if comments:
-            f.write("Comments: true\n")
-        f.write("---\n\n")
-        f.write(f"# `{title}`\n\n")
-        f.write(body)
-        f.write("\n")
-        if comments:
-            f.write("\n## Comments\n\n")
-            f.write(comments)
-            f.write("\n")
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as e:
+        die(f"Failed to parse Jira response: {e}")
 
 
 def main() -> None:
-    key, comments_n = parse_args(sys.argv[1:])
+    """Main entry point."""
+    key, comments_limit = parse_args(sys.argv[1:])
 
-    raw = fetch_ticket(key, comments_n)
-    lines = strip_ansi(raw)
+    raw_data = fetch_ticket(key)
+    fields = raw_data.get("fields", {})
 
-    title = extract_title(lines, fallback=key)
-    link = extract_link(lines)
-    status = extract_status(lines)
+    # Extract metadata
+    title = fields.get("summary", key)
+    status = fields.get("status", {}).get("name", "Unknown")
 
-    body_lines = extract_section(lines, _DESC_SEP_RE)
-    body = jira_to_md(join_paragraphs(body_lines))
+    # Build proper browse link
+    self_link = raw_data.get("self", "")
+    if self_link:
+        # Extract base URL and replace API path with browse
+        base_url = self_link.split("/rest/api/")[0]
+        link = f"{base_url}/browse/{key}"
+    else:
+        link = f"https://jira.example.com/browse/{key}"
 
+    # Convert description from ADF to markdown
+    description = fields.get("description", {})
+    if description and description.get("type") == "doc":
+        body = adf_to_markdown(description).strip()
+    else:
+        body = "No description available."
+
+    # Extract comments if requested
     comments_body = ""
-    if comments_n is not None:
-        skip_re = re.compile(r"^Use --comments")
-        comment_lines = extract_section(lines, _COMMENT_SEP_RE, stop_re=skip_re)
-        if comment_lines:
-            comments_body = jira_to_md(join_paragraphs(comment_lines))
+    if comments_limit is not None:
+        comments_body = extract_comments(raw_data, comments_limit)
 
-    output_file = f"{key}.md"
-    write_markdown(
-        output_file,
-        title=title,
-        status=status,
-        link=link,
-        body=body,
-        comments=comments_body,
-    )
-    print(f"Created {output_file}")
+    # Write output
+    print(f"---")
+    print(f'title: "{title.replace('"', '\\"')}"')
+    print(f"status: {status}")
+    print(f"link: {link}")
+    if comments_body:
+        print("comments: true")
+    print(f"---\n")
+    print(f"# {title}\n")
+    print(body)
+
+    if comments_body:
+        print(f"\n## Comments\n")
+        print(comments_body)
 
 
 if __name__ == "__main__":

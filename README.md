@@ -26,50 +26,12 @@ Test the plugin locally without installing:
 claude --plugin-dir ${PWD}
 ```
 
-## Permissions
-
-Claude Code agents cannot declare their own tool permissions ([#10093](https://github.com/anthropics/claude-code/issues/10093)). Configure permissions in your project's `.claude/settings.local.json` so agents can run read-only and build commands without repeated approval prompts.
-
-Recommended settings for Go projects:
-
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(cat:*)",
-      "Bash(find:*)",
-      "Bash(head:*)",
-      "Bash(ls:*)",
-      "Bash(make:*)",
-      "Bash(pwd)",
-      "Bash(tail:*)",
-      "Bash(tree:*)",
-      "Bash(wc:*)",
-      "Bash(which:*)",
-      "Bash(go:*)",
-      "Bash(golangci-lint:*)",
-      "Bash(git branch:*)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)",
-      "Bash(git merge-base:*)",
-      "Bash(git rev-parse:*)",
-      "Bash(git show:*)",
-      "Bash(git status:*)"
-    ]
-  }
-}
-```
-
-Extend with additional patterns as needed (e.g., `Bash(kubectl:*)`, `Bash(oc:*)`, `Bash(gh:*)`). Any unmatched Bash command will prompt for approval.
-
-**Important:** A catch-all `"ask": ["Bash"]` in global settings (`~/.claude/settings.json`) will intercept all Bash commands before project-level `allow` rules are evaluated. Remove it if you use project-level allow patterns.
-
 ## What's Included
 
 | Type       | Count | Examples                                           |
 | ---------- | ----- | -------------------------------------------------- |
 | **Agents** | 11    | go-architect, go-developer, tekton-expert, gha-expert |
-| **Skills** | 7     | /go-check, /go-cover, /ginkgo, /jira, /make        |
+| **Skills** | 8     | /go-check, /go-cover, /ginkgo, /jira, /make, /defuddle |
 
 ## Go Development Workflow
 
@@ -193,6 +155,7 @@ Skills are discrete, repeatable tasks invoked via `/skill-name`. Unlike agents, 
 | **/go-code**       | Go code quality standards, idioms, and YAGNI/KISS.         |
 | **/jira**          | Retrieve a Jira ticket and convert to markdown.            |
 | **/make**          | Run or discover Makefile targets for build automation.     |
+| **/defuddle**      | Extract readable web content, removing navigation/ads.     |
 | **/agent-persona** | 5-element persona framework for defining agent identities. |
 
 ## Go Development Workflow

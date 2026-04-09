@@ -59,7 +59,7 @@ Per [go-common.md](go-common.md) and `/go-code` skill (for idioms, naming, YAGNI
 
 1. **Read PLAN.md** — Understand entire plan before coding
 2. **Per step:** Mark `in-progress` → Implement contract → Write unit tests → `/go-check` → Mark `done`
-3. **Verify:** `/go-check` after implementation; `/make <target>` for specific build tasks
+3. **Verify:** `/go-check` after implementation; `/make <target>` for specific build tasks; `/make --review` after Makefile changes
 4. **Output:** Terminal-friendly, concise, standard backticks for code
 5. **Safety:** No commits unless explicitly prompted
 6. **Blockers:** Update status to `blocked: <reason>`, report issue

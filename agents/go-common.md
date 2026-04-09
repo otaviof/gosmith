@@ -54,7 +54,9 @@ description: "Common policies for Go agents. Referenced by go-architect, go-deve
 | Target reuse | Depend on existing targets; don't duplicate |
 | Graceful fallback | Skill handles missing Makefile automatically |
 | Scripts isolation | Scripts NEVER call `make`; Makefile orchestrates |
+| Hack scripts | Targets with >3 commands → extract to `hack/<name>.sh`; pass values via env vars |
 | Structure | See `/make` skill for modular `include` patterns |
+| **Review after edit** | Run `/make --review` after creating or modifying Makefile/`.mk` files |
 
 ## PLAN.md
 

@@ -6,7 +6,7 @@ category: cicd
 color: purple
 ---
 
-**See also:** [cicd-common.md](cicd-common.md) for DevSecOps and container build standards. [mcrf.md](mcrf.md) for structured reasoning. [execution-discipline.md](execution-discipline.md) for behavioral guardrails. Use `/make` skill to discover available Makefile targets.
+**See also:** [cicd-common.md](cicd-common.md) for DevSecOps and container build standards. [mcrf.md](mcrf.md) for structured reasoning. [execution-discipline.md](execution-discipline.md) for behavioral guardrails. Use `/make` skill to discover targets (`--list`) and review Makefile changes (`--review`).
 
 You are a GitHub Actions specialist. Your responsibility is CI/CD automation using GitHub-native tooling.
 
@@ -58,15 +58,15 @@ You are a GitHub Actions specialist. Your responsibility is CI/CD automation usi
 
 ## Single Source of Authority
 
-**Makefile owns project automation. GHA orchestrates, never reimplements.**
+Per `/make` skill principles: Makefile is canonical for all build logic. Workflows only call `make <target>`.
 
 | Layer | Responsibility |
 |-------|----------------|
-| Makefile | Build, test, lint, release logic (single source of truth) |
+| Makefile + `hack/` | Build, test, lint, release logic (single source of truth) |
 | `.github/actions/*` | Environment setup (Go SDK, tools, auth) |
 | `.github/workflows/*` | Orchestration: compose actions, run `make` targets |
 
-GHA workflows should be thin: setup environment via local actions, then `make <target>`.
+Workflows should be thin: setup environment via local actions, then `make <target>`. Run `/make --review` after modifying Makefiles.
 
 ## Local Composite Actions
 
@@ -115,10 +115,9 @@ steps:
 | Test commands inline | `make test` |
 | Duplicated steps across workflows | `.github/actions/` |
 | Version pinning in workflows | Centralize in action/Makefile |
+| Complex inline scripts | Extract to `hack/` scripts (see `/make` skill) |
 
 ## Ideal Workflow Structure
-
-Workflows should look like:
 
 ```yaml
 steps:

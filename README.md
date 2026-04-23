@@ -31,7 +31,7 @@ claude --plugin-dir ${PWD}
 | Type       | Count | Examples                                           |
 | ---------- | ----- | -------------------------------------------------- |
 | **Agents** | 11    | go-architect, go-developer, tekton-expert, gha-expert |
-| **Skills** | 8     | /go-check, /go-cover, /ginkgo, /jira, /make, /defuddle |
+| **Skills** | 9     | /go-check, /go-cover, /ginkgo, /jira, /make, /defuddle, /verify |
 
 ## Go Development Workflow
 
@@ -42,14 +42,15 @@ flowchart LR
     go-tester["go-tester<br/>Test"]
     go-reviewer["go-reviewer<br/>Review"]
     go-code["/go-code<br/>Standards"]
+    verify["/verify<br/>Check"]
 
     go-architect -->|PLAN.md| go-developer
     go-developer -->|Code| go-tester
     go-tester -->|Tests Pass| go-reviewer
     go-reviewer -->|Approved| Merge([Merge])
 
-    go-developer -.->|invoke| go-code
-    go-reviewer -.->|invoke| go-code
+    go-developer & go-reviewer -.->|invoke| go-code
+    go-architect & go-developer & go-tester & go-reviewer -.-> verify
 ```
 
 ## Quick Start
@@ -157,6 +158,7 @@ Skills are discrete, repeatable tasks invoked via `/skill-name`. Unlike agents, 
 | **/make**          | Run or discover Makefile targets for build automation.     |
 | **/defuddle**      | Extract readable web content, removing navigation/ads.     |
 | **/agent-persona** | 5-element persona framework for defining agent identities. |
+| **/verify**        | Verify answers by checking sources, contradictions, and confidence level. |
 
 ## Go Development Workflow
 

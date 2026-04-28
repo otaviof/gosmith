@@ -31,7 +31,7 @@ claude --plugin-dir ${PWD}
 | Type       | Count | Examples                                           |
 | ---------- | ----- | -------------------------------------------------- |
 | **Agents** | 11    | go-architect, go-developer, tekton-expert, gha-expert |
-| **Skills** | 9     | /go-check, /go-cover, /ginkgo, /jira, /make, /defuddle, /verify |
+| **Skills** | 10    | /go-check, /go-cover, /ginkgo, /jira, /make, /defuddle, /verify, /pr-comments |
 
 ## Go Development Workflow
 
@@ -43,11 +43,13 @@ flowchart LR
     go-reviewer["go-reviewer<br/>Review"]
     go-code["/go-code<br/>Standards"]
     verify["/verify<br/>Check"]
+    pr-comments["/pr-comments<br/>Triage"]
 
     go-architect -->|PLAN.md| go-developer
     go-developer -->|Code| go-tester
     go-tester -->|Tests Pass| go-reviewer
     go-reviewer -->|Approved| Merge([Merge])
+    go-reviewer -.->|Comments| pr-comments -.->|Fixes| go-developer
 
     go-developer & go-reviewer -.->|invoke| go-code
     go-architect & go-developer & go-tester & go-reviewer -.-> verify
@@ -159,6 +161,7 @@ Skills are discrete, repeatable tasks invoked via `/skill-name`. Unlike agents, 
 | **/defuddle**      | Extract readable web content, removing navigation/ads.     |
 | **/agent-persona** | 5-element persona framework for defining agent identities. |
 | **/verify**        | Verify answers by checking sources, contradictions, and confidence level. |
+| **/pr-comments**   | Fetch PR review comments, triage, apply fixes, generate reply report. |
 
 ## Go Development Workflow
 

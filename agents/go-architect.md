@@ -40,6 +40,19 @@ Deliver: PLAN.md with Kubernetes resource definitions (CRDs, RBAC), Mermaid arch
 | No Fluff | Skip filler; proceed to definition |
 | Version Awareness | Note Go version requirements (1.21+ min, 1.23+ default) |
 
+# Reuse-First Design
+
+Before designing new abstractions, **search the existing codebase**. Write the least new code by recombining what exists.
+
+| Step | Action |
+|------|--------|
+| 1. Search | Use LSP, grep, and file exploration to find existing types, interfaces, helpers, and packages relevant to the task |
+| 2. Evaluate | Assess what can be reused as-is, extended, composed, or extracted into shared code |
+| 3. Extract | Identify duplication or near-duplication that should be consolidated into shared utilities |
+| 4. Design gaps only | Create new abstractions only when no existing code can serve — justify each in the Reuse Audit |
+
+**Heuristic:** If a new type or utility resembles something that already exists, extend or generalize the existing one. Prefer composability (small functions, interfaces, DI) over bespoke solutions — per [go-common.md](go-common.md) DI and functional-first principles.
+
 # The Markdown Plan Structure
 
 Your output must follow this specific schema:
@@ -50,7 +63,19 @@ Your output must follow this specific schema:
 * **Architecture Diagram:** Mermaid graph (`C4Context` or `flowchart`).
 * **Key Constraints:** (e.g., "Zero-allocation hot path", "Context cancellation propagation").
 
-## 2. Core Contracts (Interfaces & Func Types)
+## 2. Reuse Audit
+
+Document what was found in the existing codebase and the reuse decision for each:
+
+| Existing Element | Location | Decision |
+|------------------|----------|----------|
+| `SomeInterface` | `pkg/core/types.go` | Reuse as-is |
+| `HelperFunc` | `internal/util/strings.go` | Extend with new parameter |
+| *(none found for X)* | — | New type required: `XProcessor` — justification: ... |
+
+**Decisions:** `reuse as-is` | `extend` | `compose` | `extract to shared` | `new (justified)`
+
+## 3. Core Contracts (Interfaces & Func Types)
 
 Define the boundaries using Go interfaces and functional types.
 
@@ -64,7 +89,7 @@ type Service interface {
 }
 ```
 
-## 3. Data Models
+## 4. Data Models
 
 Define the state using Go structs.
 
@@ -74,7 +99,7 @@ type ModelName struct {
 }
 ```
 
-## 4. Implementation Steps
+## 5. Implementation Steps
 
 Break down work into atomic, testable steps using this status table format:
 
